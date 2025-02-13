@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tic-Tac-Toe Football</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                text-align: center;
+            }
+            .game-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .board-container {
+                display: grid;
+                grid-template-columns: 100px repeat(3, 100px);
+                grid-template-rows: 100px repeat(3, 100px);
+                gap: 5px;
+                justify-content: center;
+            }
+            .label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            .cell {
+                width: 100px;
+                height: 100px;
+                font-size: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid black;
+                cursor: pointer;
+            }
+            .cell.taken {
+                background-color: lightgray;
+                cursor: not-allowed;
+            }
+            .question-container {
+                margin-top: 20px;
+            }
+            #answerBox {
+                margin-top: 10px;
+                padding: 5px;
+            }
+            #timer {
+                font-size: 20px;
+                font-weight: bold;
+                margin-top: 10px;
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>VALORANT Tic-Tac-Toe</h1>
+        <label
+            >Player 1: <input type="text" id="player1" placeholder="Enter name"
+        /></label>
+        <label
+            >Player 2: <input type="text" id="player2" placeholder="Enter name"
+        /></label>
+        <button onclick="startGame()">Start Game</button>
+        <h2 id="turn">Enter Player Names to Start</h2>
+        <h3 id="timer">Timer: 45s</h3>
+        <div class="game-container">
+            <div class="board-container" id="board-container"></div>
+        </div>
+        <div class="question-container">
+            <input type="text" id="answerBox" placeholder="Enter player name" />
+            <button onclick="submitAnswer()">Submit</button>
+        </div>
+        <script>
+            let currentPlayer;
+            let players = {};
+            let board;
+            let playerConnections = [];
+            let selectedCell = null;
+            let correctAnswers = new Set();
+            let rowLabels = [];
+            let colLabels = [];
+            let timer;
+            let timeLeft = 45;
+
+            function loadCSV() {
+                fetch("Book3.csv")
+                    .then((response) => response.text())
+                    .then((data) => {
+                        let rows = data
+                            .split("\n")
+                            .map((row) => row.split(","));
+                        rows.slice(1).forEach((row) => {
+                            if (
+                                row.length < 4 ||
+                                !row[0] ||
+                                !row[1] ||
+                                !row[2] ||
+                                !row[3]
+                            )
+                                return;
+                            let name = row[0].trim().toLowerCase();
+                            let team1 = row[1].trim();
+                            let team2 = row[2].trim();
+                            let country = row[3].trim();
+                            playerConnections.push({
+                                name,
+                                team1,
+                                team2,
+                                country,
+                            });
+                        });
+                        generateLabels();
+                    })
+                    .catch((error) =>
+                        console.error("Error loading CSV:", error),
+                    );
+            }
+
+            function generateLabels() {
+                let uniqueTeams = [
+                    ...new Set(playerConnections.map((p) => p.team2)),
+                ];
+                let uniqueCountries = [
+                    ...new Set(playerConnections.map((p) => p.country)),
+                ];
+                rowLabels = uniqueCountries.slice(0, 3);
+                colLabels = uniqueTeams.slice(0, 3);
+            }
+
+            function startGame() {
+                const p1 = document.getElementById("player1").value;
+                const p2 = document.getElementById("player2").value;
+                if (!p1 || !p2) {
+                    alert("Both players must enter names!");
+                    return;
+                }
+                players = { X: p1, O: p2 };
+                board = Array(3)
+                    .fill()
+                    .map(() => Array(3).fill(""));
+                currentPlayer = "X";
+                document.getElementById("turn").innerText =
+                    `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+                generateBoard();
+                resetTimer();
+            }
+
+            function generateBoard() {
+                const boardContainer =
+                    document.getElementById("board-container");
+                boardContainer.innerHTML = "";
+
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        let cell = document.createElement("div");
+                        if (i === 0 && j === 0) {
+                            cell.classList.add("label");
+                        } else if (i === 0) {
+                            cell.innerText = colLabels[j - 1];
+                            cell.classList.add("label");
+                        } else if (j === 0) {
+                            cell.innerText = rowLabels[i - 1];
+                            cell.classList.add("label");
+                        } else {
+                            cell.classList.add("cell");
+                            cell.dataset.row = i - 1;
+                            cell.dataset.col = j - 1;
+                            cell.onclick = selectCell;
+                        }
+                        boardContainer.appendChild(cell);
+                    }
+                }
+            }
+
+            function selectCell(event) {
+                if (selectedCell) return;
+                selectedCell = event.target;
+                let row = selectedCell.dataset.row;
+                let col = selectedCell.dataset.col;
+                if (board[row][col] !== "") return;
+                resetTimer();
+                let country = rowLabels[row];
+                let team = colLabels[col];
+                correctAnswers = new Set(
+                    playerConnections
+                        .filter(
+                            (p) => p.country === country && p.team2 === team,
+                        )
+                        .map((p) => p.name),
+                );
+            }
+
+            function submitAnswer() {
+                if (!selectedCell) return;
+                let answer = document
+                    .getElementById("answerBox")
+                    .value.trim()
+                    .toLowerCase();
+                if (correctAnswers.has(answer)) {
+                    let row = selectedCell.dataset.row;
+                    let col = selectedCell.dataset.col;
+                    board[row][col] = currentPlayer;
+                    selectedCell.innerText = currentPlayer;
+                    selectedCell.classList.add("taken");
+                    selectedCell.onclick = null;
+                    if (checkWinner()) {
+                        document.getElementById("turn").innerText =
+                            `${players[currentPlayer]} Wins!`;
+                        document
+                            .querySelectorAll(".cell")
+                            .forEach((c) => (c.onclick = null));
+                        return;
+                    }
+                    switchTurn();
+                } else {
+                    alert("Incorrect answer! Try again.");
+                }
+                document.getElementById("answerBox").value = "";
+                selectedCell = null;
+            }
+
+            function resetTimer() {
+                clearInterval(timer);
+                timeLeft = 45;
+                document.getElementById("timer").innerText =
+                    `Timer: ${timeLeft}s`;
+                timer = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("timer").innerText =
+                        `Timer: ${timeLeft}s`;
+                    if (timeLeft <= 0) {
+                        switchTurn();
+                    }
+                }, 1000);
+            }
+
+            function switchTurn() {
+                clearInterval(timer);
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                document.getElementById("turn").innerText =
+                    `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+                resetTimer();
+            }
+
+            window.onload = loadCSV;
+        </script>
+    </body>
+</html>
