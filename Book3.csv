@@ -1,72 +1,72 @@
-Name,team1,team2,Country
-aspas,LOUD,Leviathan,Brazil
-aspas,LOUD,mibr,Brazil
-yay,Cloud9,Bleed,USA
-yay,Bleed,EG,USA
-yay,EG,Cloud9,USA
-trexx,KOI,Vitality,Russia
-ardiis,NRG,NAVI,Latvia
-Yuchen,DRG,FPX,China
-nizhao,DRG,FPX,China
-yosemite,FPX,BLG,China
-Rb,DRX,TEC,Korea
-stax,T1,DRX,Korea
-BuZz,T1,DRX,Korea
-Zest,DRX,Bleed,Korea
-leaf,Cloud9,G2,USA
-Zellsis,Cloud9,Sentinels,USA
-Benkai,Paper Rex,Global Esports,Singapore
-Ethan,EG,NRG,USA
-Demon1,EG,NRG,USA
-Boostio,EG,100 Thieves,USA
-jawgemo,EG,G2,Cambodia
-C0M,EG,Leviathan,USA
-heat,mibr,KRU,Brazil
-Redgar,Team Liquid,GIANTSX,Russia
-Sayf,Team Liquid,Vitality,Sweden
-soulcas,Team Liquid,Apeks,United Kingdom
-cNed,FUT,NAVI,Turkey
-nzr,FURIA,Leviathan,Argentina
-t3xture,GEN.G,Global Esports,Korea
-Monyet,RRQ,Global Esports,Indonesia
-Monyet,Paper Rex,Global Esports,Indonesia
-2GE,RRQ,Team Secret,Phillipines
-Derrek,EG,100 Thieves,USA
-bang,Sentinels,100 Thieves,USA
-Sacy,Sentinels,LOUD,Brazil
-Pancada,Sentinels,LOUD,Brazil
-Munchkin,T1,Gen.G,Korea
-ban,T1,Talon,Korea
-mazin,FURIA,mibr,Brazil
-Qck,FURIA,LOUD,Brazil
-nephh,BLG,Bleed,Singapore
-Avova,Team Heretics,Apeks,Denmark
-blazek1ng,BOOM,Global Esports,Indonesia
-juicy,Wolves,Bleed,Singapore
-Lysoar,Wolves,FPX,China
-Deryeon,Global Esports,Bleed,Singapore
-Rossy,T1,Cloud9,USA
-N4RRATE,KC,Sentinels,USA
-yoman,Gen.G,NS Redforce,Korea
-iNTRO,T1,NS Redforce,Korea
-Enzo,Team Liquid,Apeks,France
-Mistic,Team Liquid,Fnatic,United Kingdom
-Mistic,Team Liquid,Apeks,United Kingdom
-Mistic,Fnatic,Apeks,United Kingdom
-Magnum,Fnatic,KOI,Czech Republic
-Magnum,Fnatic,KC,Czech Republic
-Magnum,KOI,Apeks,Czech Republic
-Magnum,KOI,KC,Czech Republic
-H1ber,Fnatic,Vitality,Finland
-hiro,Fnatic,NAVI,Netherlands
-soulcas,Team Liquid,Apeks,United Kingdom
-soulcas,Team Liquid,KOI,United Kingdom
-soulcas,KOI,Apeks,United Kingdom
-Avova,Apeks,G2,Denmark
-Nivera,KC,Team Liquid,Belgium
-Scream,KC,Team Liquid,Belgium
-Cloud,NAVI,GIANTSX,Russia
-runneR,Vitality,GIANTSX,Macedonia
-tomaszy,KC,GIANTSX,Portugal
-Zyppan,M8,NAVI,Sweden
-SUYGETSU,KC,NAVI,Russia
+Name,team1,team2,Country,Trophy
+aspas,LOUD,Leviathan,Brazil,Champions
+aspas,LOUD,mibr,Brazil,Champions
+yay,Cloud9,Bleed,USA,Masters
+yay,Bleed,EG,USA,Masters
+yay,EG,Cloud9,USA,Masters
+trexx,KOI,Vitality,Russia,
+ardiis,NRG,NAVI,Latvia,Masters
+Yuchen,DRG,FPX,China,
+nizhao,DRG,FPX,China,
+yosemite,FPX,BLG,China,
+Rb,DRX,TEC,Korea,
+stax,T1,DRX,Korea,
+BuZz,T1,DRX,Korea,
+Zest,DRX,Bleed,Korea,
+leaf,Cloud9,G2,USA,
+Zellsis,Cloud9,Sentinels,USA,Masters
+Benkai,Paper Rex,Global Esports,Singapore,
+Ethan,EG,NRG,USA,Champions
+Demon1,EG,NRG,USA,Champions
+Boostio,EG,100 Thieves,USA,Champions
+jawgemo,EG,G2,Cambodia,Champions
+C0M,EG,Leviathan,USA,Champions
+heat,mibr,KRU,Brazil,
+Redgar,Team Liquid,GIANTSX,Russia,Masters
+Sayf,Team Liquid,Vitality,Sweden,
+soulcas,Team Liquid,Apeks,United Kingdom,
+cNed,FUT,NAVI,Turkey,Champions
+nzr,FURIA,Leviathan,Argentina,
+t3xture,GEN.G,Global Esports,Korea,Masters
+Monyet,RRQ,Global Esports,Indonesia,
+Monyet,Paper Rex,Global Esports,Indonesia,
+2GE,RRQ,Team Secret,Phillipines,
+Derrek,EG,100 Thieves,USA,
+bang,Sentinels,100 Thieves,USA,
+Sacy,Sentinels,LOUD,Brazil,Champions
+Pancada,Sentinels,LOUD,Brazil,Champions
+Munchkin,T1,Gen.G,Korea,Masters
+ban,T1,Talon,Korea,
+mazin,FURIA,mibr,Brazil,
+Qck,FURIA,LOUD,Brazil,
+nephh,BLG,Bleed,Singapore,
+Avova,Team Heretics,Apeks,Denmark,
+blazek1ng,BOOM,Global Esports,Indonesia,
+juicy,Wolves,Bleed,Singapore,
+Lysoar,Wolves,FPX,China,
+Deryeon,Global Esports,Bleed,Singapore,
+Rossy,T1,Cloud9,USA,
+N4RRATE,KC,Sentinels,USA,
+yoman,Gen.G,NS Redforce,Korea,
+iNTRO,T1,NS Redforce,Korea,
+Enzo,Team Liquid,Apeks,France,
+Mistic,Team Liquid,Fnatic,United Kingdom,
+Mistic,Team Liquid,Apeks,United Kingdom,
+Mistic,Fnatic,Apeks,United Kingdom,
+Magnum,Fnatic,KOI,Czech Republic,
+Magnum,Fnatic,KC,Czech Republic,
+Magnum,KOI,Apeks,Czech Republic,
+Magnum,KOI,KC,Czech Republic,
+H1ber,Fnatic,Vitality,Finland,
+hiro,Fnatic,NAVI,Netherlands,
+soulcas,Team Liquid,Apeks,United Kingdom,
+soulcas,Team Liquid,KOI,United Kingdom,
+soulcas,KOI,Apeks,United Kingdom,
+Avova,Apeks,G2,Denmark,
+Nivera,KC,Team Liquid,Belgium,
+Scream,KC,Team Liquid,Belgium,
+Cloud,NAVI,GIANTSX,Russia,
+runneR,Vitality,GIANTSX,Macedonia,
+tomaszy,KC,GIANTSX,Portugal,
+Zyppan,M8,NAVI,Sweden,Masters
+SUYGETSU,KC,NAVI,Russia,Masters
