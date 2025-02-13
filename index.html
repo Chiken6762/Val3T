@@ -9,12 +9,24 @@
                 font-family: Arial, sans-serif;
                 text-align: center;
             }
-            .board {
+            .game-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+            .board-container {
                 display: grid;
-                grid-template-columns: repeat(3, 100px);
+                grid-template-columns: 100px repeat(3, 100px);
+                grid-template-rows: 100px repeat(3, 100px);
                 gap: 5px;
                 justify-content: center;
-                margin-top: 20px;
+            }
+            .label {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
             }
             .cell {
                 width: 100px;
@@ -49,10 +61,11 @@
         /></label>
         <button onclick="startGame()">Start Game</button>
         <h2 id="turn">Enter Player Names to Start</h2>
-        <div class="board" id="board"></div>
+        <div class="game-container">
+            <div class="board-container" id="board-container"></div>
+        </div>
         <div class="question-container">
-            <p id="questionText">Click a box to get a question.</p>
-            <input type="text" id="answerBox" placeholder="Enter your answer" />
+            <input type="text" id="answerBox" placeholder="Enter player name" />
             <button onclick="submitAnswer()">Submit</button>
         </div>
         <script>
@@ -61,8 +74,9 @@
             let board;
             let playerConnections = [];
             let selectedCell = null;
-            let currentQuestion = "";
             let correctAnswers = new Set();
+            let rowLabels = [];
+            let colLabels = [];
 
             function loadCSV() {
                 fetch("Book3.csv")
@@ -91,11 +105,22 @@
                                 country,
                             });
                         });
-                        console.log("CSV Loaded:", playerConnections);
+                        generateLabels();
                     })
                     .catch((error) =>
                         console.error("Error loading CSV:", error),
                     );
+            }
+
+            function generateLabels() {
+                let uniqueTeams = [
+                    ...new Set(playerConnections.map((p) => p.team2)),
+                ];
+                let uniqueCountries = [
+                    ...new Set(playerConnections.map((p) => p.country)),
+                ];
+                rowLabels = uniqueCountries.slice(0, 3);
+                colLabels = uniqueTeams.slice(0, 3);
             }
 
             function startGame() {
@@ -116,60 +141,52 @@
             }
 
             function generateBoard() {
-                const boardDiv = document.getElementById("board");
-                boardDiv.innerHTML = "";
-                for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < 3; j++) {
+                const boardContainer =
+                    document.getElementById("board-container");
+                boardContainer.innerHTML = "";
+
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
                         let cell = document.createElement("div");
-                        cell.classList.add("cell");
-                        cell.dataset.row = i;
-                        cell.dataset.col = j;
-                        cell.onclick = askQuestion;
-                        boardDiv.appendChild(cell);
+                        if (i === 0 && j === 0) {
+                            cell.classList.add("label");
+                        } else if (i === 0) {
+                            cell.innerText = colLabels[j - 1];
+                            cell.classList.add("label");
+                        } else if (j === 0) {
+                            cell.innerText = rowLabels[i - 1];
+                            cell.classList.add("label");
+                        } else {
+                            cell.classList.add("cell");
+                            cell.dataset.row = i - 1;
+                            cell.dataset.col = j - 1;
+                            cell.onclick = selectCell;
+                        }
+                        boardContainer.appendChild(cell);
                     }
                 }
             }
 
-            function askQuestion(event) {
+            function selectCell(event) {
                 if (selectedCell) return;
                 selectedCell = event.target;
                 let row = selectedCell.dataset.row;
                 let col = selectedCell.dataset.col;
                 if (board[row][col] !== "") return;
 
-                let randomEntry =
-                    playerConnections[
-                        Math.floor(Math.random() * playerConnections.length)
-                    ];
-                if (!randomEntry || !randomEntry.country || !randomEntry.team2)
-                    return;
-
-                let questionType = Math.random() < 0.5 ? "team" : "country";
-                if (questionType === "team") {
-                    currentQuestion = `Name a player who has played for ${randomEntry.team2}.`;
-                    correctAnswers = new Set(
-                        playerConnections
-                            .filter((p) => p.team2 === randomEntry.team2)
-                            .map((p) => p.name),
-                    );
-                } else {
-                    currentQuestion = `Name a player who is from ${randomEntry.country} and has played for ${randomEntry.team2}.`;
-                    correctAnswers = new Set(
-                        playerConnections
-                            .filter(
-                                (p) =>
-                                    p.country === randomEntry.country &&
-                                    p.team2 === randomEntry.team2,
-                            )
-                            .map((p) => p.name),
-                    );
-                }
-                document.getElementById("questionText").innerText =
-                    currentQuestion;
+                let country = rowLabels[row];
+                let team = colLabels[col];
+                correctAnswers = new Set(
+                    playerConnections
+                        .filter(
+                            (p) => p.country === country && p.team2 === team,
+                        )
+                        .map((p) => p.name),
+                );
             }
 
             function submitAnswer() {
-                if (!selectedCell || !currentQuestion) return;
+                if (!selectedCell) return;
                 let answer = document
                     .getElementById("answerBox")
                     .value.trim()
@@ -197,34 +214,6 @@
                 }
                 document.getElementById("answerBox").value = "";
                 selectedCell = null;
-                currentQuestion = "";
-                document.getElementById("questionText").innerText =
-                    "Click a box to get a question.";
-            }
-
-            function checkWinner() {
-                for (let i = 0; i < 3; i++) {
-                    if (
-                        board[i][0] &&
-                        board[i][0] === board[i][1] &&
-                        board[i][1] === board[i][2]
-                    )
-                        return true;
-                    if (
-                        board[0][i] &&
-                        board[0][i] === board[1][i] &&
-                        board[1][i] === board[2][i]
-                    )
-                        return true;
-                }
-                return (
-                    (board[0][0] &&
-                        board[0][0] === board[1][1] &&
-                        board[1][1] === board[2][2]) ||
-                    (board[0][2] &&
-                        board[0][2] === board[1][1] &&
-                        board[1][1] === board[2][0])
-                );
             }
 
             window.onload = loadCSV;
