@@ -1,234 +1,367 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Tic-Tac-Toe Football</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                text-align: center;
-            }
-            .board {
-                display: grid;
-                grid-template-columns: repeat(3, 100px);
-                gap: 5px;
-                justify-content: center;
-                margin-top: 20px;
-            }
-            .cell {
-                width: 100px;
-                height: 100px;
-                font-size: 24px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border: 2px solid black;
-                cursor: pointer;
-            }
-            .cell.taken {
-                background-color: lightgray;
-                cursor: not-allowed;
-            }
-            .question-container {
-                margin-top: 20px;
-            }
-            #answerBox {
-                margin-top: 10px;
-                padding: 5px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Tic-Tac-Toe Football</h1>
-        <label
-            >Player 1: <input type="text" id="player1" placeholder="Enter name"
-        /></label>
-        <label
-            >Player 2: <input type="text" id="player2" placeholder="Enter name"
-        /></label>
-        <button onclick="startGame()">Start Game</button>
-        <h2 id="turn">Enter Player Names to Start</h2>
-        <div class="board" id="board"></div>
-        <div class="question-container">
-            <p id="questionText">Click a box to get a question.</p>
-            <input type="text" id="answerBox" placeholder="Enter your answer" />
-            <button onclick="submitAnswer()">Submit</button>
-        </div>
-        <script>
-            let currentPlayer;
-            let players = {};
-            let board;
-            let playerConnections = [];
-            let selectedCell = null;
-            let currentQuestion = "";
-            let correctAnswers = new Set();
+  <head>
+    <meta charset="UTF-8" />
+    <title>Valorant Tic-Tac-Toe</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h1 {
+        margin-top: 20px;
+        color: #2c3e50;
+      }
+      label {
+        margin: 10px;
+        font-size: 16px;
+        color: #2c3e50;
+      }
+      input {
+        padding: 5px 10px;
+        margin-left: 5px;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+      }
+      button {
+        padding: 8px 16px;
+        font-size: 16px;
+        background-color: #2980b9;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 10px;
+      }
+      button:hover {
+        background-color: #1f6391;
+      }
+      #turn,
+      #timer {
+        margin: 10px;
+        color: #2c3e50;
+      }
+      .game-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .board-container {
+        display: grid;
+        grid-template-columns: repeat(3, 140px);
+        gap: 10px;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .cell {
+        width: 140px;
+        height: 140px;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #34495e;
+        border-radius: 8px;
+        background-color: #2980b9;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        user-select: none;
+      }
+      .cell.open {
+        background-color: #ecf0f1;
+        color: #2c3e50;
+      }
+      .cell.taken {
+        background-color: #27ae60;
+        color: #fff;
+        cursor: not-allowed;
+      }
+      .question-container {
+        margin-top: 20px;
+      }
+      #answerBox {
+        margin-top: 10px;
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #bdc3c7;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
 
-            function loadCSV() {
-                fetch("Book3.csv")
-                    .then((response) => response.text())
-                    .then((data) => {
-                        let rows = data
-                            .split("\n")
-                            .map((row) => row.split(","));
-                        rows.slice(1).forEach((row) => {
-                            if (
-                                row.length < 4 ||
-                                !row[0] ||
-                                !row[1] ||
-                                !row[2] ||
-                                !row[3]
-                            )
-                                return;
-                            let name = row[0].trim().toLowerCase();
-                            let team1 = row[1].trim();
-                            let team2 = row[2].trim();
-                            let country = row[3].trim();
-                            playerConnections.push({
-                                name,
-                                team1,
-                                team2,
-                                country,
-                            });
-                        });
-                        console.log("CSV Loaded:", playerConnections);
-                    })
-                    .catch((error) =>
-                        console.error("Error loading CSV:", error),
-                    );
-            }
+  <body>
+    <h1>Valorant Tic-Tac-Toe</h1>
 
-            function startGame() {
-                const p1 = document.getElementById("player1").value;
-                const p2 = document.getElementById("player2").value;
-                if (!p1 || !p2) {
-                    alert("Both players must enter names!");
-                    return;
-                }
-                players = { X: p1, O: p2 };
-                board = Array(3)
-                    .fill()
-                    .map(() => Array(3).fill(""));
-                currentPlayer = "X";
-                document.getElementById("turn").innerText =
-                    `${players[currentPlayer]}'s Turn (${currentPlayer})`;
-                generateBoard();
-            }
+    <!-- Player inputs and Start Game button -->
+    <div>
+      <label>
+        Player 1:
+        <input type="text" id="player1" placeholder="Enter name" />
+      </label>
+      <label>
+        Player 2:
+        <input type="text" id="player2" placeholder="Enter name" />
+      </label>
+      <!-- Make sure this matches the function name exactly: startGame() -->
+      <button onclick="startGame()">Start Game</button>
+    </div>
 
-            function generateBoard() {
-                const boardDiv = document.getElementById("board");
-                boardDiv.innerHTML = "";
-                for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < 3; j++) {
-                        let cell = document.createElement("div");
-                        cell.classList.add("cell");
-                        cell.dataset.row = i;
-                        cell.dataset.col = j;
-                        cell.onclick = askQuestion;
-                        boardDiv.appendChild(cell);
-                    }
-                }
-            }
+    <h2 id="turn">Enter Player Names to Start</h2>
+    <h3 id="timer">Timer: 45s</h3>
 
+    <!-- Board container -->
+    <div class="game-container">
+      <div class="board-container" id="board-container"></div>
+    </div>
 
-            function askQuestion(event) {
-                if (selectedCell) return;
-                selectedCell = event.target;
-                let row = selectedCell.dataset.row;
-                let col = selectedCell.dataset.col;
-                if (board[row][col] !== "") return;
+    <!-- Question/answer area -->
+    <div class="question-container">
+      <p id="questionText">Click a cell to reveal its question.</p>
+      <input type="text" id="answerBox" placeholder="Enter answer" />
+      <button onclick="submitAnswer()">Submit</button>
+    </div>
 
-                let randomEntry =
-                    playerConnections[
-                        Math.floor(Math.random() * playerConnections.length)
-                    ];
-                if (!randomEntry || !randomEntry.country || !randomEntry.team2)
-                    return;
+    <!-- All scripts in one place, in the global scope -->
+    <script>
+      // Global variables
+      let currentPlayer;
+      let players = {};
+      let selectedCell = null;
+      let timer;
+      let timeLeft = 45;
 
-                let questionType = Math.random() < 0.5 ? "team" : "country";
-                if (questionType === "team") {
-                    currentQuestion = `Name a player who has played for ${randomEntry.team2}.`;
-                    correctAnswers = new Set(
-                        playerConnections
-                            .filter((p) => p.team2 === randomEntry.team2)
-                            .map((p) => p.name),
-                    );
-                } else {
-                    currentQuestion = `Name a player who is from ${randomEntry.country} and has played for ${randomEntry.team2}.`;
-                    correctAnswers = new Set(
-                        playerConnections
-                            .filter(
-                                (p) =>
-                                    p.country === randomEntry.country &&
-                                    p.team2 === randomEntry.team2,
-                            )
-                            .map((p) => p.name),
-                    );
-                }
-                document.getElementById("questionText").innerText =
-                    currentQuestion;
-            }
+      // Array to hold CSV records: { name, team1, team2, country, trophy }
+      let recordsArray = [];
 
-            function submitAnswer() {
-                if (!selectedCell || !currentQuestion) return;
-                let answer = document
-                    .getElementById("answerBox")
-                    .value.trim()
-                    .toLowerCase();
-                if (correctAnswers.has(answer)) {
-                    let row = selectedCell.dataset.row;
-                    let col = selectedCell.dataset.col;
-                    board[row][col] = currentPlayer;
-                    selectedCell.innerText = currentPlayer;
-                    selectedCell.classList.add("taken");
-                    selectedCell.onclick = null;
-                    if (checkWinner()) {
-                        document.getElementById("turn").innerText =
-                            `${players[currentPlayer]} Wins!`;
-                        document
-                            .querySelectorAll(".cell")
-                            .forEach((c) => (c.onclick = null));
-                        return;
-                    }
-                    currentPlayer = currentPlayer === "X" ? "O" : "X";
-                    document.getElementById("turn").innerText =
-                        `${players[currentPlayer]}'s Turn (${currentPlayer})`;
-                } else {
-                    alert("Incorrect answer! Try again.");
-                }
-                document.getElementById("answerBox").value = "";
-                selectedCell = null;
-                currentQuestion = "";
-                document.getElementById("questionText").innerText =
-                    "Click a box to get a question.";
-            }
+      // 1. Load CSV on window load
+      window.onload = function () {
+        loadCSV();
+      };
 
-            function checkWinner() {
-                for (let i = 0; i < 3; i++) {
-                    if (
-                        board[i][0] &&
-                        board[i][0] === board[i][1] &&
-                        board[i][1] === board[i][2]
-                    )
-                        return true;
-                    if (
-                        board[0][i] &&
-                        board[0][i] === board[1][i] &&
-                        board[1][i] === board[2][i]
-                    )
-                        return true;
-                }
-                return (
-                    (board[0][0] &&
-                        board[0][0] === board[1][1] &&
-                        board[1][1] === board[2][2]) ||
-                    (board[0][2] &&
-                        board[0][2] === board[1][1] &&
-                        board[1][1] === board[2][0])
-                );
-            }
+      // 2. Fetch the CSV data
+      function loadCSV() {
+        fetch("Book3.csv")
+          .then((response) => response.text())
+          .then((data) => {
+            const rows = data.split("\n").map((row) => row.split(","));
+            // Skip the header row
+            rows.slice(1).forEach((row) => {
+              if (
+                row.length < 4 ||
+                !row[0].trim() ||
+                !row[1].trim() ||
+                !row[2].trim() ||
+                !row[3].trim()
+              )
+                return;
 
-            window.onload = loadCSV;
-        </script>
-    </body>
+              recordsArray.push({
+                name: row[0].trim(),
+                team1: row[1].trim(),
+                team2: row[2].trim(),
+                country: row[3].trim(),
+                trophy: row[4] ? row[4].trim() : "",
+              });
+            });
+          })
+          .catch((error) => console.error("Error loading CSV:", error));
+      }
+
+      // 3. Start Game
+      function startGame() {
+        const p1 = document.getElementById("player1").value.trim();
+        const p2 = document.getElementById("player2").value.trim();
+        if (!p1 || !p2) {
+          alert("Both players must enter names!");
+          return;
+        }
+        players = { X: p1, O: p2 };
+        currentPlayer = "X";
+        document.getElementById("turn").innerText = `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+        generateBoard();
+        resetTimer();
+      }
+
+      // 4. Generate the board
+      function generateBoard() {
+        const boardContainer = document.getElementById("board-container");
+        boardContainer.innerHTML = "";
+        // Shuffle records and pick up to 9
+        const shuffledRecords = shuffleArray([...recordsArray]);
+        const boardRecords = shuffledRecords.slice(0, 9);
+
+        boardRecords.forEach((record) => {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+
+          // Decide which question type
+          // 0: two-teams, 1: team+country, 2: team+trophy (only if trophy exists)
+          let possibleTypes = [0, 1];
+          if (record.trophy && record.trophy !== "") {
+            possibleTypes.push(2);
+          }
+          const questionType =
+            possibleTypes[Math.floor(Math.random() * possibleTypes.length)];
+          cell.dataset.questionType = questionType;
+
+          let clueText = "";
+          if (questionType == 0) {
+            // Two-teams
+            cell.dataset.team1 = record.team1;
+            cell.dataset.team2 = record.team2;
+            clueText = `${record.team1} & ${record.team2}`;
+          } else if (questionType == 1) {
+            // Team + country
+            const chosenTeam = Math.random() < 0.5 ? record.team1 : record.team2;
+            cell.dataset.chosenTeam = chosenTeam;
+            cell.dataset.country = record.country;
+            clueText = `${chosenTeam} & ${record.country}`;
+          } else if (questionType == 2) {
+            // Team + trophy
+            const chosenTeam = Math.random() < 0.5 ? record.team1 : record.team2;
+            cell.dataset.chosenTeam = chosenTeam;
+            cell.dataset.trophy = record.trophy;
+            clueText = `${chosenTeam} & ${record.trophy}`;
+          }
+
+          cell.dataset.clue = clueText;
+
+          // Initially, show "?" to indicate it's closed
+          cell.innerText = "?";
+          cell.onclick = selectCell;
+          boardContainer.appendChild(cell);
+        });
+      }
+
+      // 5. Select (flip open) a cell
+      function selectCell(event) {
+        // Close the previously selected cell, if any
+        if (selectedCell && selectedCell !== event.target) {
+          selectedCell.style.borderColor = "#34495e";
+          selectedCell.innerText = "?";
+          selectedCell.classList.remove("open");
+          selectedCell = null;
+        }
+        const cell = event.target;
+        if (cell.classList.contains("taken")) return;
+
+        // Flip open the new cell
+        cell.classList.add("open");
+        cell.style.borderColor = "#3498db";
+        cell.innerText = cell.dataset.clue;
+        selectedCell = cell;
+        document.getElementById("questionText").innerText =
+          "Enter your answer for this cell.";
+      }
+
+      // 6. Submit answer
+      function submitAnswer() {
+        const answerInput = document.getElementById("answerBox");
+        const answer = answerInput.value.trim().toLowerCase();
+        if (!selectedCell) {
+          alert("Please select a cell first.");
+          return;
+        }
+
+        let validNames = [];
+        const qType = selectedCell.dataset.questionType;
+
+        if (qType == 0) {
+          // Two-teams
+          const t1 = selectedCell.dataset.team1;
+          const t2 = selectedCell.dataset.team2;
+          validNames = recordsArray
+            .filter(
+              (r) =>
+                r.team1.toLowerCase() === t1.toLowerCase() &&
+                r.team2.toLowerCase() === t2.toLowerCase()
+            )
+            .map((r) => r.name.toLowerCase());
+        } else if (qType == 1) {
+          // Team + country
+          const chosenTeam = selectedCell.dataset.chosenTeam;
+          const country = selectedCell.dataset.country;
+          validNames = recordsArray
+            .filter(
+              (r) =>
+                (r.team1.toLowerCase() === chosenTeam.toLowerCase() ||
+                  r.team2.toLowerCase() === chosenTeam.toLowerCase()) &&
+                r.country.toLowerCase() === country.toLowerCase()
+            )
+            .map((r) => r.name.toLowerCase());
+        } else if (qType == 2) {
+          // Team + trophy
+          const chosenTeam = selectedCell.dataset.chosenTeam;
+          const trophy = selectedCell.dataset.trophy;
+          validNames = recordsArray
+            .filter(
+              (r) =>
+                (r.team1.toLowerCase() === chosenTeam.toLowerCase() ||
+                  r.team2.toLowerCase() === chosenTeam.toLowerCase()) &&
+                r.trophy.toLowerCase() === trophy.toLowerCase()
+            )
+            .map((r) => r.name.toLowerCase());
+        }
+
+        if (validNames.includes(answer)) {
+          // Correct answer
+          selectedCell.innerText = currentPlayer;
+          selectedCell.classList.remove("open");
+          selectedCell.classList.add("taken");
+          selectedCell.onclick = null;
+          selectedCell.style.borderColor = "#34495e";
+          selectedCell = null;
+          answerInput.value = "";
+          switchTurn();
+        } else {
+          // Wrong answer
+          alert("Wrong answer. Your chance is over.");
+          selectedCell.innerText = "?";
+          selectedCell.classList.remove("open");
+          selectedCell.style.borderColor = "#34495e";
+          selectedCell = null;
+          answerInput.value = "";
+          switchTurn();
+        }
+      }
+
+      // 7. Timer and turn switching
+      function resetTimer() {
+        clearInterval(timer);
+        timeLeft = 45;
+        document.getElementById("timer").innerText = `Timer: ${timeLeft}s`;
+        timer = setInterval(() => {
+          timeLeft--;
+          document.getElementById("timer").innerText = `Timer: ${timeLeft}s`;
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            switchTurn();
+          }
+        }, 1000);
+      }
+
+      function switchTurn() {
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        document.getElementById("turn").innerText =
+          `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+        resetTimer();
+      }
+
+      // 8. Shuffle helper
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+    </script>
+  </body>
 </html>
