@@ -49,10 +49,16 @@
                 margin-top: 10px;
                 padding: 5px;
             }
+            #timer {
+                font-size: 20px;
+                font-weight: bold;
+                margin-top: 10px;
+                color: red;
+            }
         </style>
     </head>
     <body>
-        <h1>Tic-Tac-Toe Football</h1>
+        <h1>VALORANT Tic-Tac-Toe</h1>
         <label
             >Player 1: <input type="text" id="player1" placeholder="Enter name"
         /></label>
@@ -61,6 +67,7 @@
         /></label>
         <button onclick="startGame()">Start Game</button>
         <h2 id="turn">Enter Player Names to Start</h2>
+        <h3 id="timer">Timer: 45s</h3>
         <div class="game-container">
             <div class="board-container" id="board-container"></div>
         </div>
@@ -77,6 +84,8 @@
             let correctAnswers = new Set();
             let rowLabels = [];
             let colLabels = [];
+            let timer;
+            let timeLeft = 45;
 
             function loadCSV() {
                 fetch("Book3.csv")
@@ -138,6 +147,7 @@
                 document.getElementById("turn").innerText =
                     `${players[currentPlayer]}'s Turn (${currentPlayer})`;
                 generateBoard();
+                resetTimer();
             }
 
             function generateBoard() {
@@ -173,7 +183,7 @@
                 let row = selectedCell.dataset.row;
                 let col = selectedCell.dataset.col;
                 if (board[row][col] !== "") return;
-
+                resetTimer();
                 let country = rowLabels[row];
                 let team = colLabels[col];
                 correctAnswers = new Set(
@@ -206,14 +216,35 @@
                             .forEach((c) => (c.onclick = null));
                         return;
                     }
-                    currentPlayer = currentPlayer === "X" ? "O" : "X";
-                    document.getElementById("turn").innerText =
-                        `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+                    switchTurn();
                 } else {
                     alert("Incorrect answer! Try again.");
                 }
                 document.getElementById("answerBox").value = "";
                 selectedCell = null;
+            }
+
+            function resetTimer() {
+                clearInterval(timer);
+                timeLeft = 45;
+                document.getElementById("timer").innerText =
+                    `Timer: ${timeLeft}s`;
+                timer = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById("timer").innerText =
+                        `Timer: ${timeLeft}s`;
+                    if (timeLeft <= 0) {
+                        switchTurn();
+                    }
+                }, 1000);
+            }
+
+            function switchTurn() {
+                clearInterval(timer);
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                document.getElementById("turn").innerText =
+                    `${players[currentPlayer]}'s Turn (${currentPlayer})`;
+                resetTimer();
             }
 
             window.onload = loadCSV;
