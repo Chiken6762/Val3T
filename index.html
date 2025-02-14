@@ -233,8 +233,14 @@
 
           cell.dataset.clue = clueText;
 
-          // Initially, show "?" to indicate it's closed
-          cell.innerText = "?";
+          // Replace "?" with the logo image
+          const logo = document.createElement("img");
+          logo.src = "vctlogo.png";
+          logo.style.width = "80%";
+          logo.style.height = "80%";
+          logo.style.objectFit = "contain";
+          cell.appendChild(logo);
+
           cell.onclick = selectCell;
           boardContainer.appendChild(cell);
         });
