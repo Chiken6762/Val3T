@@ -1,4 +1,4 @@
-Name,team1,team2,Country,Trophy
+Name,team1,team2,Country,Tropy
 aspas,LOUD,Leviathan,Brazil,Champions
 aspas,LOUD,mibr,Brazil,Champions
 yay,Cloud9,Bleed,USA,Masters
@@ -17,16 +17,25 @@ leaf,Cloud9,G2,USA,
 Zellsis,Cloud9,Sentinels,USA,Masters
 Benkai,Paper Rex,Global Esports,Singapore,
 Ethan,EG,NRG,USA,Champions
+Ethan,100 Thieves,NRG,Champions
+Ethan,EG,100 Thieves,Champions
 Demon1,EG,NRG,USA,Champions
+Demon1,Leviathan,NRG,USA,Champions
+Demon1,EG,Leviathan,USA,Champions
 Boostio,EG,100 Thieves,USA,Champions
 jawgemo,EG,G2,Cambodia,Champions
 C0M,EG,Leviathan,USA,Champions
 heat,mibr,KRU,Brazil,
+heat,mibr,FURIA,Brazil
+heat,KRU,FURIA,Brazil
 Redgar,Team Liquid,GIANTSX,Russia,Masters
 Sayf,Team Liquid,Vitality,Sweden,
 soulcas,Team Liquid,Apeks,United Kingdom,
 cNed,FUT,NAVI,Turkey,Champions
 nzr,FURIA,Leviathan,Argentina,
+nzr,Leviathan,mibr,Argentina
+xand,KRU,FURIA,Brazil
+nzr,mibr,Furia,Argentina
 t3xture,GEN.G,Global Esports,Korea,Masters
 Monyet,RRQ,Global Esports,Indonesia,
 Monyet,Paper Rex,Global Esports,Indonesia,
@@ -63,6 +72,7 @@ soulcas,Team Liquid,Apeks,United Kingdom,
 soulcas,Team Liquid,KOI,United Kingdom,
 soulcas,KOI,Apeks,United Kingdom,
 Avova,Apeks,G2,Denmark,
+Avova,G2,Heretics,Denmark
 Nivera,KC,Team Liquid,Belgium,
 Scream,KC,Team Liquid,Belgium,
 Cloud,NAVI,GIANTSX,Russia,
@@ -70,3 +80,46 @@ runneR,Vitality,GIANTSX,Macedonia,
 tomaszy,KC,GIANTSX,Portugal,
 Zyppan,M8,NAVI,Sweden,Masters
 SUYGETSU,KC,NAVI,Russia,Masters
+TenZ,Cloud9,Sentinels,Canada,Masters
+Marved,NRG,Sentinels,Canada,Masters
+curry,T1,Sentinels,USA
+curry,T1,Cloud9,USA
+curry,Cloud9,Sentinels,USA
+dapr,Sentinels,G2,USA,Masters
+ShahZaM,Sentinels,G2,USA,Masters
+icy,EG,G2,USA
+Kai,BLG,Trace,China
+Melser,KRU,Leviathan,Chile
+adverso,KRU,Leviathan,Chile
+kiNgg,KRU,Leviathan,Chile
+Shyy,KRU,Leviathan,Chile
+Mazino,KRU,Leviathan,Chile
+keznit,KRU,Leviathan,Chile
+tex,NRG,Leviathan,USA
+nataNk,Vitality,Leviathan,France
+wippie,Cloud9,G2,Russia
+OXY,Cloud9,G2,USA
+xeta,Cloud9,T1,Korea
+NaturE,EG,100 Thieves,USA
+NaturE,EG,Gen.G,USA
+NaturE,Gen.G,100 Thieves,USA
+eeiu,NRG,100 Thieves,Canada
+ec1s,100 Thieves,Team Liquid,United Kingdom
+steel,100 Thieves,T1,Canada
+zeek,Heretics,G2,Poland,Champions
+pAura,Heretics,BBL Esports,Turkey
+keloqz,Heretics,G2,France
+grubinho,Heretics,KOI,Poland
+jamppi,BBL Esports,Team Liquid,Finland
+Muj,FUT Esports,BBL,Turkey
+ShadoW,Apeks,KOI,Sweden
+MOLSI,GIATNTSX,Vitality,Poland
+kamo,Team Liquid,KOI,Poland
+Famsii,GIANTSX,KOI,Finland
+koldamenta,G2,KOI,Spain
+rhyme,Gen.G,GIANTSX,Norway
+Victor,T1,NRG,USA,Champions
+crashies,T1,Fnatic,USA,Champions
+crashies,T1,NRG,USA,Champions
+crashes,NRG,Fnatic,USA,Champions
+kamyk,Team Liquid,Fnatic,Poland
